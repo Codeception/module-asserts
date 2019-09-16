@@ -1,0 +1,32 @@
+{
+    "name":"codeception/module-asserts",
+    "description":"Codeception module containing various assertions",
+    "keywords":["codeception", "asserts", "assertions"],
+    "homepage":"http://codeception.com/",
+    "type":"library",
+    "license":"MIT",
+    "authors":[
+        {
+            "name":"Michael Bodnarchuk"
+        },
+        {
+            "name":"Gintautas Miselis"
+        }
+    ],
+    "minimum-stability": "RC",
+
+    "require": {
+        "php": ">=5.6.0 <8.0",
+        "codeception/lib-asserts": "^1.0.0",
+        "codeception/codeception": "4.0.x-dev"
+    },
+    "require-dev": {
+        "codeception/util-robohelpers": "dev-master"
+    },
+    "autoload":{
+        "classmap": ["src/"]
+    },
+    "config": {
+        "classmap-authoritative": true
+    }
+}

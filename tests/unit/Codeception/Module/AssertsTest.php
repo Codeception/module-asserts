@@ -1,4 +1,10 @@
 <?php
+
+function make_container()
+{
+    return \Codeception\Util\Stub::make('Codeception\Lib\ModuleContainer');
+}
+
 class AssertsTest extends \Codeception\PHPUnit\TestCase
 {
     /** @var \Codeception\Module\Asserts */
