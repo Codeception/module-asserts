@@ -361,6 +361,14 @@ __not documented__
 __not documented__
 
 
+### assertStringEndsNotWith
+__not documented__
+
+
+### assertStringEndsWith
+__not documented__
+
+
 ### assertStringNotContainsString
 __not documented__
 
