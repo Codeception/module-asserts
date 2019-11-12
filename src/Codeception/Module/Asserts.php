@@ -48,6 +48,8 @@ class Asserts extends CodeceptionModule
         assertCount  as public;
         assertStringStartsWith  as public;
         assertStringStartsNotWith  as public;
+        assertStringEndsWith  as public;
+        assertStringEndsNotWith  as public;
         assertNotTrue  as public;
         assertNotFalse  as public;
         assertStringContainsString  as public;

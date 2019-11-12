@@ -25,6 +25,8 @@ class AssertsTest extends \Codeception\PHPUnit\TestCase
         $this->module->assertNotRegExp('/^[a-z]$/', '1');
         $this->module->assertStringStartsWith('fo', 'foo');
         $this->module->assertStringStartsNotWith('ba', 'foo');
+        $this->module->assertStringEndsWith('oo', 'foo');
+        $this->module->assertStringEndsNotWith('fo', 'foo');
         $this->module->assertEmpty([]);
         $this->module->assertNotEmpty([1]);
         $this->module->assertNull(null);
