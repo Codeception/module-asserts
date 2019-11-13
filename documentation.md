@@ -362,11 +362,13 @@ __not documented__
 
 
 ### assertStringEndsNotWith
-__not documented__
+ 
+ * `Available since` 1.1.0 of module-asserts
 
 
 ### assertStringEndsWith
-__not documented__
+ 
+ * `Available since` 1.1.0 of module-asserts
 
 
 ### assertStringNotContainsString
