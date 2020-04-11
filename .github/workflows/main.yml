@@ -39,7 +39,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        composer require "phpunit/phpunit=~${{ matrix.phpunit }}" --no-update --ignore-platform-reqs
+        composer require "phpunit/phpunit=${{ matrix.phpunit }}" --no-update --ignore-platform-reqs
         composer install --prefer-dist --no-progress --no-interaction --no-suggest
 
     - name: Run test suite
