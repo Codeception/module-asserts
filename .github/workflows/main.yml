@@ -9,6 +9,19 @@ jobs:
     strategy:
       matrix:
         php: [5.6, 7.0, 7.1, 7.2, 7.3, 7.4]
+        include:
+          - php: 5.6
+            phpunit: 5
+          - php: 7.0
+            phpunit: 6
+          - php: 7.1
+            phpunit: 7
+          - php: 7.2
+            phpunit: 8
+          - php: 7.3
+            phpunit: 9
+          - php: 7.4
+            phpunit: 9
 
     steps:
     - name: Checkout code
@@ -25,7 +38,9 @@ jobs:
       run: composer validate
 
     - name: Install dependencies
-      run: composer install --prefer-dist --no-progress --no-interaction --no-suggest
+      run: |
+        composer require "phpunit/phpunit=~${{ matrix.phpunit }}" --no-update --ignore-platform-reqs
+        composer install --prefer-dist --no-progress --no-interaction --no-suggest
 
     - name: Run test suite
       run: php ./vendor/bin/codecept run
