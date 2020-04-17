@@ -29,6 +29,8 @@ class Asserts extends CodeceptionModule
         assertNotContains as public;
         assertRegExp as public;
         assertNotRegExp as public;
+        assertMatchesRegularExpression as public;
+        assertDoesNotMatchRegularExpression as public;
         assertEmpty as public;
         assertNotEmpty as public;
         assertNull as public;
@@ -37,6 +39,7 @@ class Asserts extends CodeceptionModule
         assertFalse as public;
         assertFileExists as public;
         assertFileNotExists as public;
+        assertFileDoesNotExist as public;
         assertGreaterOrEquals  as public;
         assertLessOrEquals  as public;
         assertIsEmpty  as public;

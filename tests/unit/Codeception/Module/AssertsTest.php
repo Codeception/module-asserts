@@ -23,6 +23,8 @@ class AssertsTest extends \Codeception\PHPUnit\TestCase
         $this->module->assertNotSame(1, '1');
         $this->module->assertRegExp('/^[\d]$/', '1');
         $this->module->assertNotRegExp('/^[a-z]$/', '1');
+        $this->module->assertMatchesRegularExpression('/^[\d]$/', '1');
+        $this->module->assertDoesNotMatchRegularExpression('/^[a-z]$/', '1');
         $this->module->assertStringStartsWith('fo', 'foo');
         $this->module->assertStringStartsNotWith('ba', 'foo');
         $this->module->assertStringEndsWith('oo', 'foo');
@@ -43,6 +45,7 @@ class AssertsTest extends \Codeception\PHPUnit\TestCase
         $this->module->assertNotFalse('foo');
         $this->module->assertFileExists(__FILE__);
         $this->module->assertFileNotExists(__FILE__ . '.notExist');
+        $this->module->assertFileDoesNotExist(__FILE__ . '.notExist');
         $this->module->assertInstanceOf('Exception', new Exception());
         //assertInternalType is deprecated and will be removed in PHPUnit 9
         //$this->module->assertInternalType('integer', 5);
