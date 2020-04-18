@@ -12,8 +12,8 @@ sudo: false
 
 install:
   - '[[ -z "$CI_USER_TOKEN" ]] || composer config github-oauth.github.com ${CI_USER_TOKEN};'
-  - travis_retry composer self-update && composer --version
-  - travis_retry composer update --prefer-dist --no-interaction
+  - COMPOSER_MEMORY_LIMIT=-1 composer self-update && composer --version
+  - COMPOSER_MEMORY_LIMIT=-1 composer update --prefer-dist --no-interaction
   - php ./vendor/bin/codecept build
 
 script:
