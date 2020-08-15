@@ -1,18 +1,26 @@
 <?php
 
-function make_container()
-{
-    return \Codeception\Util\Stub::make('Codeception\Lib\ModuleContainer');
-}
+namespace unit\Codeception\Module;
 
-class AssertsTest extends \Codeception\PHPUnit\TestCase
+use Codeception\Lib\ModuleContainer;
+use Codeception\Module\Asserts;
+use Codeception\PHPUnit\TestCase;
+use Codeception\Util\Stub;
+use Exception;
+use PHPUnit\Framework\AssertionFailedError;
+use RuntimeException;
+use stdClass;
+
+class AssertsTest extends TestCase
 {
-    /** @var \Codeception\Module\Asserts */
+    /** @var Asserts */
     protected $module;
 
     public function _setUp()
     {
-        $this->module = new \Codeception\Module\Asserts(make_container());
+        /** @var ModuleContainer $container */
+        $container = Stub::make(ModuleContainer::class);
+        $this->module = new Asserts($container);
     }
 
     public function testAsserts()
@@ -47,11 +55,7 @@ class AssertsTest extends \Codeception\PHPUnit\TestCase
         $this->module->assertFileNotExists(__FILE__ . '.notExist');
         $this->module->assertFileDoesNotExist(__FILE__ . '.notExist');
         $this->module->assertInstanceOf('Exception', new Exception());
-        //assertInternalType is deprecated and will be removed in PHPUnit 9
-        //$this->module->assertInternalType('integer', 5);
         $this->module->assertArrayHasKey('one', ['one' => 1, 'two' => 2]);
-        //assertArraySubset is deprecated and will be removed in PHPUnit 9
-        //$this->module->assertArraySubset(['foo' => [1]], ['foo' => [1, 2]]);
         $this->module->assertCount(3, [1, 2, 3]);
 
         $this->module->assertStringContainsString('bar', 'foobar');
@@ -91,32 +95,32 @@ class AssertsTest extends \Codeception\PHPUnit\TestCase
 
     public function testExceptions()
     {
-        $this->module->expectException('Exception', function () {
+        $this->module->expectThrowable('Exception', function () {
             throw new Exception;
         });
-        $this->module->expectException(new Exception('here'), function () {
+        $this->module->expectThrowable(new Exception('here'), function () {
             throw new Exception('here');
         });
-        $this->module->expectException(new Exception('here', 200), function () {
+        $this->module->expectThrowable(new Exception('here', 200), function () {
             throw new Exception('here', 200);
         });
     }
 
     public function testExceptionFails()
     {
-        $this->expectException(PHPUnit\Framework\AssertionFailedError::class);
+        $this->expectException(AssertionFailedError::class);
 
-        $this->module->expectException(new Exception('here', 200), function () {
+        $this->module->expectThrowable(new Exception('here', 200), function () {
             throw new Exception('here', 2);
         });
     }
 
     public function testOutputExceptionTimeWhenNothingCaught()
     {
-        $this->expectException(\PHPUnit\Framework\AssertionFailedError::class);
+        $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessageRegExp('/RuntimeException/');
 
-        $this->module->expectException(RuntimeException::class, function () {
+        $this->module->expectThrowable(RuntimeException::class, function () {
         });
     }
 
@@ -135,7 +139,7 @@ class AssertsTest extends \Codeception\PHPUnit\TestCase
 
     public function testExpectThrowableFailOnDifferentClass()
     {
-        $this->expectException(\PHPUnit\Framework\AssertionFailedError::class);
+        $this->expectException(AssertionFailedError::class);
 
         $this->module->expectThrowable(new RuntimeException(), function () {
             throw new Exception();
@@ -144,7 +148,7 @@ class AssertsTest extends \Codeception\PHPUnit\TestCase
 
     public function testExpectThrowableFailOnDifferentMessage()
     {
-        $this->expectException(\PHPUnit\Framework\AssertionFailedError::class);
+        $this->expectException(AssertionFailedError::class);
 
         $this->module->expectThrowable(new Exception('foo', 200), function () {
             throw new Exception('bar', 200);
@@ -153,7 +157,7 @@ class AssertsTest extends \Codeception\PHPUnit\TestCase
 
     public function testExpectThrowableFailOnDifferentCode()
     {
-        $this->expectException(\PHPUnit\Framework\AssertionFailedError::class);
+        $this->expectException(AssertionFailedError::class);
 
         $this->module->expectThrowable(new Exception('foobar', 200), function () {
             throw new Exception('foobar', 2);
@@ -162,7 +166,7 @@ class AssertsTest extends \Codeception\PHPUnit\TestCase
 
     public function testExpectThrowableFailOnNothingCaught()
     {
-        $this->expectException(\PHPUnit\Framework\AssertionFailedError::class);
+        $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessageRegExp('/RuntimeException/');
 
         $this->module->expectThrowable(RuntimeException::class, function () {
