@@ -1,6 +1,8 @@
-# Codeception module containing various assertions
+# Codeception Module Asserts
 
 ![Build Status](https://github.com/Codeception/module-asserts/workflows/CI/badge.svg)
+
+A Codeception module containing various assertions.
 
 ## Installation
 
