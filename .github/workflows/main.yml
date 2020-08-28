@@ -24,9 +24,7 @@ jobs:
       run: composer validate
 
     - name: Install dependencies
-      run: |
-        composer require phpunit/phpunit "<=8.5.2" --no-update --ignore-platform-reqs
-        composer install --prefer-dist --no-progress --no-interaction --no-suggest
+      run: composer install --prefer-dist --no-progress --no-interaction --no-suggest
 
     - name: Run test suite
       run: php vendor/bin/codecept run
