@@ -1,89 +1,16 @@
 <?php
+
 namespace Codeception\Module;
 
 use Codeception\Lib\Notification;
-use Codeception\Module as CodeceptionModule;
-use Codeception\Util\Shared\Asserts as SharedAsserts;
+use Exception;
+use Throwable;
 
 /**
  * Special module for using asserts in your tests.
  */
-class Asserts extends CodeceptionModule
+class Asserts extends AbstractAsserts
 {
-    use SharedAsserts {
-        assertEquals as public;
-        assertNotEquals as public;
-        assertEqualsCanonicalizing as public;
-        assertNotEqualsCanonicalizing as public;
-        assertEqualsIgnoringCase as public;
-        assertNotEqualsIgnoringCase as public;
-        assertEqualsWithDelta as public;
-        assertNotEqualsWithDelta as public;
-        assertSame as public;
-        assertNotSame as public;
-        assertGreaterThan as public;
-        assertGreaterThanOrEqual as public;
-        assertLessThan as public;
-        assertLessThanOrEqual as public;
-        assertContains as public;
-        assertNotContains as public;
-        assertRegExp as public;
-        assertNotRegExp as public;
-        assertMatchesRegularExpression as public;
-        assertDoesNotMatchRegularExpression as public;
-        assertEmpty as public;
-        assertNotEmpty as public;
-        assertNull as public;
-        assertNotNull as public;
-        assertTrue as public;
-        assertFalse as public;
-        assertFileExists as public;
-        assertFileNotExists as public;
-        assertFileDoesNotExist as public;
-        assertGreaterOrEquals  as public;
-        assertLessOrEquals  as public;
-        assertIsEmpty  as public;
-        assertArrayHasKey  as public;
-        assertArrayNotHasKey  as public;
-        assertInstanceOf  as public;
-        assertNotInstanceOf  as public;
-        assertInternalType  as public;
-        assertCount  as public;
-        assertStringStartsWith  as public;
-        assertStringStartsNotWith  as public;
-        assertStringEndsWith  as public;
-        assertStringEndsNotWith  as public;
-        assertNotTrue  as public;
-        assertNotFalse  as public;
-        assertStringContainsString  as public;
-        assertStringContainsStringIgnoringCase  as public;
-        assertStringNotContainsString  as public;
-        assertStringNotContainsStringIgnoringCase  as public;
-        assertIsArray  as public;
-        assertIsBool  as public;
-        assertIsFloat  as public;
-        assertIsInt  as public;
-        assertIsNumeric  as public;
-        assertIsObject  as public;
-        assertIsResource  as public;
-        assertIsString  as public;
-        assertIsScalar  as public;
-        assertIsCallable  as public;
-        assertIsNotArray  as public;
-        assertIsNotBool  as public;
-        assertIsNotFloat  as public;
-        assertIsNotInt  as public;
-        assertIsNotNumeric  as public;
-        assertIsNotObject  as public;
-        assertIsNotResource  as public;
-        assertIsNotString  as public;
-        assertIsNotScalar  as public;
-        assertIsNotCallable  as public;
-        fail as public;
-    }
-
-
-
     /**
      * Handles and checks exception called inside callback function.
      * Either exception class name or exception instance should be provided.
@@ -108,8 +35,8 @@ class Asserts extends CodeceptionModule
      * ```
      *
      * @deprecated Use expectThrowable() instead
-     * @param $exception string or \Exception
-     * @param $callback
+     * @param Exception|string $exception
+     * @param callable $callback
      */
     public function expectException($exception, $callback)
     {
@@ -140,31 +67,28 @@ class Asserts extends CodeceptionModule
      * });
      * ```
      *
-     * @param $throwable string or \Throwable
-     * @param $callback
+     * @param Throwable|string $throwable
+     * @param callable $callback
      */
     public function expectThrowable($throwable, $callback)
     {
         if (is_object($throwable)) {
-            /** @var $throwable \Throwable */
             $class = get_class($throwable);
             $msg = $throwable->getMessage();
             $code = $throwable->getCode();
         } else {
-            $class= $throwable;
+            $class = $throwable;
             $msg = null;
             $code = null;
         }
 
         try {
             $callback();
-        } catch (\Exception $t) {
+        } catch (Exception $t) {
             $this->checkThrowable($t, $class, $msg, $code);
-
             return;
-        } catch (\Throwable $t) {
+        } catch (Throwable $t) {
             $this->checkThrowable($t, $class, $msg, $code);
-
             return;
         }
 
@@ -175,7 +99,7 @@ class Asserts extends CodeceptionModule
      * Check if the given throwable matches the expected data,
      * fail (throws an exception) if it does not.
      *
-     * @param \Throwable $throwable
+     * @param Throwable $throwable
      * @param string $expectedClass
      * @param string $expectedMsg
      * @param int $expectedCode

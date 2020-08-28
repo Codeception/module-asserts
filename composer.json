@@ -2,7 +2,7 @@
     "name":"codeception/module-asserts",
     "description":"Codeception module containing various assertions",
     "keywords":["codeception", "asserts", "assertions"],
-    "homepage":"http://codeception.com/",
+    "homepage":"https://codeception.com/",
     "type":"library",
     "license":"MIT",
     "authors":[
@@ -11,6 +11,10 @@
         },
         {
             "name":"Gintautas Miselis"
+        },
+        {
+            "name":"Gustavo Nieves",
+            "homepage": "https://medium.com/@ganieves"
         }
     ],
     "minimum-stability": "RC",
