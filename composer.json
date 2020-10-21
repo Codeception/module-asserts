@@ -23,9 +23,6 @@
         "codeception/lib-asserts": "^1.13.1",
         "codeception/codeception": "*@dev"
     },
-    "require-dev": {
-        "codeception/util-robohelpers": "dev-master"
-    },
     "conflict": {
         "codeception/codeception": "<4.0"
     },
