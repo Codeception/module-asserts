@@ -5,7 +5,7 @@ namespace unit\Codeception\Module;
 use Codeception\Lib\ModuleContainer;
 use Codeception\Module\Asserts;
 use Codeception\PHPUnit\TestCase;
-use Codeception\Util\Stub;
+use Codeception\Stub;
 use Exception;
 use PHPUnit\Framework\AssertionFailedError;
 use RuntimeException;
