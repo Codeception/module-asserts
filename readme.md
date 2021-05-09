@@ -7,6 +7,10 @@
 
 A Codeception module containing various assertions.
 
+## Requirements
+
+* `PHP 7.1` or higher.
+
 ## Installation
 
 ```

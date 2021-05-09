@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Codeception\Module;
 
-use Codeception\Module as CodeceptionModule;
-use Codeception\Util\Shared\Asserts as SharedAsserts;
+use Codeception\Module;
+use Codeception\Util\Shared\Asserts;
 
-abstract class AbstractAsserts extends CodeceptionModule
+abstract class AbstractAsserts extends Module
 {
-    use SharedAsserts {
+    use Asserts {
         assertArrayHasKey as public;
         assertArrayNotHasKey as public;
         assertClassHasAttribute as public;
