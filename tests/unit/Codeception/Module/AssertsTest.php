@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace unit\Codeception\Module;
 
 use Codeception\Lib\ModuleContainer;
@@ -11,7 +13,7 @@ use PHPUnit\Framework\AssertionFailedError;
 use RuntimeException;
 use stdClass;
 
-class AssertsTest extends TestCase
+final class AssertsTest extends TestCase
 {
     /** @var Asserts */
     protected $module;
