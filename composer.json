@@ -19,12 +19,12 @@
     ],
     "minimum-stability": "RC",
     "require": {
-        "php": "^7.1 || ^8.0",
-        "codeception/lib-asserts": "^1.13.1",
-        "codeception/codeception": "*@dev"
+        "php": "^7.3 || ^8.0",
+        "codeception/lib-asserts": "^1.13",
+        "codeception/codeception": "^5.0 || *@dev"
     },
     "conflict": {
-        "codeception/codeception": "<4.0"
+        "codeception/codeception": "<5.0"
     },
     "autoload": {
         "classmap": [
