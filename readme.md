@@ -21,6 +21,8 @@ composer require "codeception/module-asserts" --dev
 
 See [the module documentation](https://codeception.com/docs/modules/Asserts).
 
+[Changelog](https://github.com/Codeception/module-asserts/releases)
+
 ## License
 
 `Codeception Module Asserts` is open-sourced software licensed under the [MIT](/LICENSE) License.
