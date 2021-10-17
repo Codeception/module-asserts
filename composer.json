@@ -17,14 +17,14 @@
             "homepage": "https://medium.com/@ganieves"
         }
     ],
-    "minimum-stability": "RC",
+    "minimum-stability": "dev",
     "require": {
-        "php": "^7.4 | ^8.0",
+        "php": "^8.0",
         "codeception/lib-asserts": "^2.0",
-        "codeception/codeception": "^4.1 | *@dev"
+        "codeception/codeception": "^5.0.0-alpha1"
     },
     "conflict": {
-        "codeception/codeception": "<4.1"
+        "codeception/codeception": "<5.0"
     },
     "autoload": {
         "classmap": [
