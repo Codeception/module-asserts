@@ -15,8 +15,7 @@ use stdClass;
 
 final class AssertsTest extends TestCase
 {
-    /** @var Asserts */
-    protected $module;
+    protected ?Asserts $module = null;
 
     public function _setUp()
     {
