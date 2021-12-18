@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Codeception\Module;
 
-use Throwable;
-
 /**
  * Special module for using asserts in your tests.
  */
@@ -34,7 +32,7 @@ class Asserts extends AbstractAsserts
      * });
      * ```
      *
-     * @param Throwable|string $throwable
+     * @param \Throwable|string $throwable
      */
     public function expectThrowable($throwable, callable $callback): void
     {
@@ -50,7 +48,7 @@ class Asserts extends AbstractAsserts
 
         try {
             $callback();
-        } catch (Throwable $t) {
+        } catch (\Throwable $t) {
             $this->checkThrowable($t, $class, $msg, $code);
             return;
         }
@@ -62,7 +60,7 @@ class Asserts extends AbstractAsserts
      * Check if the given throwable matches the expected data,
      * fail (throws an exception) if it does not.
      */
-    protected function checkThrowable(Throwable $throwable, string $expectedClass, ?string $expectedMsg, ?int $expectedCode): void
+    protected function checkThrowable(\Throwable $throwable, string $expectedClass, ?string $expectedMsg, ?int $expectedCode): void
     {
         if (!($throwable instanceof $expectedClass)) {
             $this->fail(sprintf(
