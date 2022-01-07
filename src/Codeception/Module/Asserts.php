@@ -60,7 +60,7 @@ class Asserts extends AbstractAsserts
      * Check if the given throwable matches the expected data,
      * fail (throws an exception) if it does not.
      */
-    protected function checkThrowable(\Throwable $throwable, string $expectedClass, ?string $expectedMsg, ?int $expectedCode): void
+    protected function checkThrowable(\Throwable $throwable, string $expectedClass, ?string $expectedMsg, $expectedCode = null): void
     {
         if (!($throwable instanceof $expectedClass)) {
             $this->fail(sprintf(
