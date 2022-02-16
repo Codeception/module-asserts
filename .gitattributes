@@ -2,6 +2,5 @@
 /tests           export-ignore
 /.gitattributes  export-ignore
 /.gitignore      export-ignore
-/Robofile.php    export-ignore
 /*.md            export-ignore
 /*.yml           export-ignore
