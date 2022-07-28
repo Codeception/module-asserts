@@ -23,7 +23,7 @@
     "homepage": "https://codeception.com/",
     "require": {
         "php": "^8.0",
-        "codeception/codeception": "*@dev",
+        "codeception/codeception": "^5.0 || *@dev",
         "codeception/lib-asserts": "^2.0"
     },
     "conflict": {
