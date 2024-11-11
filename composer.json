@@ -22,7 +22,7 @@
     ],
     "homepage": "https://codeception.com/",
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "codeception/codeception": "*@dev",
         "codeception/lib-asserts": "^2.0"
     },
