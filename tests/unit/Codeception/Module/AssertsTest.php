@@ -10,6 +10,9 @@ use Codeception\PHPUnit\TestCase;
 use Codeception\Stub;
 use Exception;
 use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Constraint\IsEqual;
+use PHPUnit\Framework\IncompleteTestError;
+use PHPUnit\Framework\SkippedWithMessageException;
 use RuntimeException;
 use stdClass;
 
@@ -19,6 +22,8 @@ final class AssertsTest extends TestCase
 
     public function _setUp()
     {
+        require_once codecept_data_dir().'/DummyClass.php';
+
         /** @var ModuleContainer $container */
         $container = Stub::make(ModuleContainer::class);
         $this->module = new Asserts($container);
@@ -27,151 +32,154 @@ final class AssertsTest extends TestCase
     public function testCodeceptionAsserts()
     {
         $this->module->assertFileNotExists(__FILE__ . '.notExist');
-        // assertGreaterOrEquals
-        // assertIsEmpty
-        // assertLessOrEquals
+        $this->module->assertGreaterOrEquals(2, 2);
+        $this->module->assertGreaterOrEquals(2, 3);
+        $this->module->assertIsEmpty([]);
+        $this->module->assertLessOrEquals(2, 1);
+        $this->module->assertLessOrEquals(2, 2);
         $this->module->assertNotRegExp('/^[a-z]$/', '1');
         $this->module->assertRegExp('/^[\d]$/', '1');
-        // assertThatItsNot
+        $this->module->assertThatItsNot(3, new IsEqual(4));
     }
 
     public function testPHPUnitAsserts()
     {
         $this->module->assertArrayHasKey('one', ['one' => 1, 'two' => 2]);
-        // assertArrayNotHasKey
-        // assertClassHasAttribute
-        // assertClassHasStaticAttribute
-        // assertClassNotHasAttribute
-        // assertClassNotHasStaticAttribute
+        $this->module->assertArrayNotHasKey('three', ['one' => 1, 'two' => 2]);
+        $this->module->assertClassHasAttribute('foo', \DummyClass::class);
+        $this->module->assertClassHasStaticAttribute('staticFoo', \DummyClass::class);
+        $this->module->assertClassNotHasAttribute('bar', \DummyClass::class);
+        $this->module->assertClassNotHasStaticAttribute('staticBar', \DummyClass::class);
         $this->module->assertContains(1, [1, 2]);
-        // assertContainsEquals
-        // assertContainsOnly
-        // assertContainsOnlyInstancesOf
+        $this->module->assertContainsEquals(2, [1, 2]);
+        $this->module->assertContainsOnly(\DummyClass::class, [new \DummyClass(), new \DummyClass()]);
+        $this->module->assertContainsOnlyInstancesOf(\DummyClass::class, [new \DummyClass(), new \DummyClass()]);
         $this->module->assertCount(3, [1, 2, 3]);
-        // assertDirectoryDoesNotExist
-        // assertDirectoryExists
+        $this->module->assertDirectoryDoesNotExist(__DIR__.'notExist');
+        $this->module->assertDirectoryExists(__DIR__);
         // assertDirectoryIsNotReadable
         // assertDirectoryIsNotWritable
-        // assertDirectoryIsReadable
-        // assertDirectoryIsWritable
+        $this->module->assertDirectoryIsReadable(__DIR__);
+        $this->module->assertDirectoryIsWritable(__DIR__);
         $this->module->assertDoesNotMatchRegularExpression('/^[a-z]$/', '1');
         $this->module->assertEmpty([]);
+        $this->module->assertEmpty(0);
         $this->module->assertEquals(1, 1);
         $this->module->assertEqualsCanonicalizing([3, 2, 1], [1, 2, 3]);
         $this->module->assertEqualsIgnoringCase('foo', 'FOO');
         $this->module->assertEqualsWithDelta(1.0, 1.01, 0.1);
         $this->module->assertFalse(false);
         $this->module->assertFileDoesNotExist(__FILE__ . '.notExist');
-        // assertFileEquals
-        // assertFileEqualsCanonicalizing
-        // assertFileEqualsIgnoringCase
+        $this->module->assertFileEquals(codecept_data_dir().'/data1.txt', codecept_data_dir().'/data1.txt');
+        $this->module->assertFileEqualsCanonicalizing(codecept_data_dir().'/data1.txt', codecept_data_dir().'/data1.txt');
+        $this->module->assertFileEqualsIgnoringCase(codecept_data_dir().'/data1.txt', codecept_data_dir().'/data2.txt');
         $this->module->assertFileExists(__FILE__);
         // assertFileIsNotReadable
         // assertFileIsNotWritable
-        // assertFileIsReadable
-        // assertFileIsWritable
-        // assertFileNotEquals
-        // assertFileNotEqualsCanonicalizing
-        // assertFileNotEqualsIgnoringCase
-        // assertFinite
-        // assertGreaterThan
-        // assertGreaterThanOrEqual
-        // assertInfinite
+        $this->module->assertFileIsReadable(__FILE__);
+        $this->module->assertFileIsWritable(__FILE__);
+        $this->module->assertFileNotEquals(codecept_data_dir().'/data1.json', codecept_data_dir().'/data1.txt');
+        $this->module->assertFileNotEqualsCanonicalizing(codecept_data_dir().'/data1.txt', codecept_data_dir().'/data3.txt');
+        $this->module->assertFileNotEqualsIgnoringCase(codecept_data_dir().'/data1.txt', codecept_data_dir().'/data3.txt');
+        $this->module->assertFinite(2);
+        $this->module->assertGreaterThan(5, 6);
+        $this->module->assertGreaterThanOrEqual(5, 5);
+        $this->module->assertInfinite(1e308 * 2);
         $this->module->assertInstanceOf('Exception', new Exception());
         $this->module->assertIsArray([1, 2, 3]);
         $this->module->assertIsBool(true);
         $this->module->assertIsCallable(function() {});
-        // assertIsClosedResource
+        $closedResource = fopen(__FILE__, 'r');
+        fclose($closedResource);
+        $this->module->assertIsClosedResource($closedResource);
         $this->module->assertIsFloat(1.2);
         $this->module->assertIsInt(2);
-        // assertIsIterable
+        $this->module->assertIsIterable([]);
         $this->module->assertIsNotArray(false);
         $this->module->assertIsNotBool([1, 2, 3]);
         $this->module->assertIsNotCallable('test');
-        // assertIsNotClosedResource
+        $openendResource = fopen(__FILE__, 'r');
+        $this->module->assertIsNotClosedResource($openendResource);
         $this->module->assertIsNotFloat(false);
         $this->module->assertIsNotInt(false);
-        // assertIsNotIterable
+        $this->module->assertIsNotIterable('test');
         $this->module->assertIsNotNumeric(false);
         $this->module->assertIsNotObject(false);
-        // assertIsNotReadable
+        $this->module->assertIsNotReadable(__FILE__.'.notExist');
         $this->module->assertIsNotResource(false);
         $this->module->assertIsNotScalar(function() {});
         $this->module->assertIsNotString(false);
-        // assertIsNotWritable
+        $this->module->assertIsNotWritable(__FILE__.'.notExist');
         $this->module->assertIsNumeric('12.34');
         $this->module->assertIsObject(new stdClass());
-        // assertIsReadable
+        $this->module->assertIsReadable(__FILE__);
         $this->module->assertIsResource(fopen(__FILE__, 'r'));
         $this->module->assertIsScalar('test');
         $this->module->assertIsString('test');
-        // assertIsWritable
-        // assertJson
-        // assertJsonFileEqualsJsonFile
-        // assertJsonFileNotEqualsJsonFile
-        // assertJsonStringEqualsJsonFile
-        // assertJsonStringEqualsJsonString
-        // assertJsonStringNotEqualsJsonFile
-        // assertJsonStringNotEqualsJsonString
-        // assertLessThan
-        // assertLessThanOrEqual
+        $this->module->assertIsWritable(__FILE__);
+        $this->module->assertJson('[]');
+        $this->module->assertJsonFileEqualsJsonFile(codecept_data_dir().'/data1.json', codecept_data_dir().'/data1.json');
+        $this->module->assertJsonFileNotEqualsJsonFile(codecept_data_dir().'/data1.json', codecept_data_dir().'/data2.json');
+        $this->module->assertJsonStringEqualsJsonFile(codecept_data_dir().'/data1.json', '["foo", "bar"]');
+        $this->module->assertJsonStringEqualsJsonString('["foo", "bar"]', '[ "foo" , "bar" ]');
+        $this->module->assertJsonStringNotEqualsJsonFile(codecept_data_dir().'/data1.json', '["bar", "foo"]');
+        $this->module->assertJsonStringNotEqualsJsonString('["foo", "bar"]', '["bar", "foo"]');
+        $this->module->assertLessThan(4, 3);
+        $this->module->assertLessThanOrEqual(3, 3);
         $this->module->assertMatchesRegularExpression('/^[\d]$/', '1');
-        // assertNan
-        // assertNotContains
-        // assertNotContainsEquals
-        // assertNotContainsOnly
-        // assertNotCount
+        $this->module->assertNan(sqrt(-1));
+        $this->module->assertNotContains('three', ['one', 'two']);
+        $this->module->assertNotContainsEquals(3, [1, 2]);
+        $this->module->assertNotContainsOnly(\DummyClass::class, [new \DummyClass(), new Exception()]);
+        $this->module->assertNotCount(1, ['one', 'two']);
         $this->module->assertNotEmpty([1]);
-        // assertNotEquals
+        $this->module->assertNotEquals(true, false);
         $this->module->assertNotEqualsCanonicalizing([3, 2, 1], [2, 3, 0, 1]);
         $this->module->assertNotEqualsIgnoringCase('foo', 'BAR');
         $this->module->assertNotEqualsWithDelta(1.0, 1.5, 0.1);
         $this->module->assertNotFalse(true);
         $this->module->assertNotFalse(null);
         $this->module->assertNotFalse('foo');
-        // assertNotInstanceOf
+        $this->module->assertNotInstanceOf(RuntimeException::class, new Exception());
         $this->module->assertNotNull('');
         $this->module->assertNotNull(false);
         $this->module->assertNotNull(0);
         $this->module->assertNotSame(1, '1');
-        // assertNotSameSize
+        $this->module->assertNotSameSize([1, 2, 3], [1, 1, 2, 3]);
         $this->module->assertNotTrue(false);
         $this->module->assertNotTrue(null);
         $this->module->assertNotTrue('foo');
         $this->module->assertNull(null);
-        // assertObjectHasAttribute
-        // assertObjectNotHasAttribute
+        $this->module->assertObjectHasAttribute('foo', new \DummyClass());
+        $this->module->assertObjectNotHasAttribute('bar', new \DummyClass());
         $this->module->assertSame(1, 1);
-        // assertSameSize
+        $this->module->assertSameSize([1, 2, 3], [1, 2, 3]);
         $this->module->assertStringContainsString('bar', 'foobar');
         $this->module->assertStringContainsStringIgnoringCase('bar', 'FooBar');
         $this->module->assertStringEndsNotWith('fo', 'foo');
         $this->module->assertStringEndsWith('oo', 'foo');
-        // assertStringEqualsFile
-        // assertStringEqualsFileCanonicalizing
-        // assertStringEqualsFileIgnoringCase
-        // assertStringMatchesFormat
-        // assertStringMatchesFormatFile
+        $this->module->assertStringEqualsFile(codecept_data_dir().'/data1.txt', 'foo bar foo');
+        $this->module->assertStringEqualsFileCanonicalizing(codecept_data_dir().'/data1.txt', 'foo bar foo');
+        $this->module->assertStringEqualsFileIgnoringCase(codecept_data_dir().'/data1.txt', 'foo bAr foo');
+        $this->module->assertStringMatchesFormat('*%s*', '***');
+        $this->module->assertStringMatchesFormatFile(codecept_data_dir().'/expectedFileFormat.txt', "FOO\n");
         $this->module->assertStringNotContainsString('baz', 'foobar');
         $this->module->assertStringNotContainsStringIgnoringCase('baz', 'FooBar');
-        // assertStringNotEqualsFile
-        // assertStringNotEqualsFileCanonicalizing
-        // assertStringNotEqualsFileIgnoringCase
-        // assertStringNotMatchesFormat
-        // assertStringNotMatchesFormatFile
+        $this->module->assertStringNotEqualsFile(codecept_data_dir().'/data2.txt', 'foo bar foo');
+        $this->module->assertStringNotEqualsFileCanonicalizing(codecept_data_dir().'/data3.txt', 'foo bar foo');
+        $this->module->assertStringNotEqualsFileIgnoringCase(codecept_data_dir().'/data3.txt', 'foo bar foo');
+        $this->module->assertStringNotMatchesFormat('*%s*', '**');
+        $this->module->assertStringNotMatchesFormatFile(codecept_data_dir().'/expectedFileFormat.txt', "FO");
         $this->module->assertStringStartsNotWith('ba', 'foo');
         $this->module->assertStringStartsWith('fo', 'foo');
-        // assertThat
+        $this->module->assertThat(4, new IsEqual(4));
         $this->module->assertTrue(true);
-        // assertXmlFileEqualsXmlFile
-        // assertXmlFileNotEqualsXmlFile
-        // assertXmlStringEqualsXmlFile
-        // assertXmlStringEqualsXmlString
-        // assertXmlStringNotEqualsXmlFile
-        // assertXmlStringNotEqualsXmlString
-        // fail
-        // markTestIncomplete
-        // markTestSkipped
+        $this->module->assertXmlFileEqualsXmlFile(codecept_data_dir().'/data1.xml', codecept_data_dir().'/data1.xml');
+        $this->module->assertXmlFileNotEqualsXmlFile(codecept_data_dir().'/data1.xml', codecept_data_dir().'/data2.xml');
+        $this->module->assertXmlStringEqualsXmlFile(codecept_data_dir().'/data1.xml', ' <foo>foo</foo> ');
+        $this->module->assertXmlStringEqualsXmlString('<foo>foo</foo>', ' <foo>foo</foo> ');
+        $this->module->assertXmlStringNotEqualsXmlFile(codecept_data_dir().'/data1.xml', '<foo>bar</foo>');
+        $this->module->assertXmlStringNotEqualsXmlString('<foo>foo</foo>', '<foo>bar</foo>');
     }
 
     public function testExceptions()
@@ -252,5 +260,29 @@ final class AssertsTest extends TestCase
 
         $this->module->expectThrowable(RuntimeException::class, function () {
         });
+    }
+
+    public function testFail()
+    {
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessage('foobar');
+
+        $this->module->fail('foobar');
+    }
+
+    public function testMarkTestIncomplete()
+    {
+        $this->expectException(IncompleteTestError::class);
+        $this->expectExceptionMessage('foobar');
+
+        $this->module->markTestIncomplete('foobar');
+    }
+
+    public function testMarkTestSkipped()
+    {
+        $this->expectException(SkippedWithMessageException::class);
+        $this->expectExceptionMessage('foobar');
+
+        $this->module->markTestSkipped('foobar');
     }
 }
