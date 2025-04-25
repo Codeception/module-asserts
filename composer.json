@@ -24,7 +24,7 @@
     "require": {
         "php": "^8.1",
         "codeception/codeception": "*@dev",
-        "codeception/lib-asserts": "^2.0"
+        "codeception/lib-asserts": "^2.2"
     },
     "conflict": {
         "codeception/codeception": "<5.0"
