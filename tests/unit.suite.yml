@@ -1,5 +1,4 @@
-# Codeception Test Suite Configuration
-
-# suite for unit (internal) tests.
-error_level: "E_ALL"
-class_name: UnitTester
+actor: UnitTester
+suite_namespace: Tests\Unit
+modules:
+    enabled: []
