@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Codeception\Module;
 
+use Throwable;
+
+use function get_debug_type;
+
 /**
  * Special module for using asserts in your tests.
  */
@@ -23,6 +27,7 @@ class Asserts extends AbstractAsserts
      *     $this->doSomethingBad();
      * });
      * ```
+     *
      * If you want to check message or throwable code, you can pass them with throwable instance:
      * ```php
      * <?php
@@ -31,15 +36,13 @@ class Asserts extends AbstractAsserts
      *     $this->doSomethingBad();
      * });
      * ```
-     *
-     * @param \Throwable|string $throwable
      */
-    public function expectThrowable($throwable, callable $callback): void
+    public function expectThrowable(string|Throwable $throwable, callable $callback): void
     {
         if (is_object($throwable)) {
             $class = get_class($throwable);
             $msg = $throwable->getMessage();
-            $code = $throwable->getCode();
+            $code = (int) $throwable->getCode();
         } else {
             $class = $throwable;
             $msg = null;
@@ -48,7 +51,7 @@ class Asserts extends AbstractAsserts
 
         try {
             $callback();
-        } catch (\Throwable $t) {
+        } catch (Throwable $t) {
             $this->checkThrowable($t, $class, $msg, $code);
             return;
         }
@@ -60,13 +63,17 @@ class Asserts extends AbstractAsserts
      * Check if the given throwable matches the expected data,
      * fail (throws an exception) if it does not.
      */
-    protected function checkThrowable(\Throwable $throwable, string $expectedClass, ?string $expectedMsg, $expectedCode = null): void
-    {
+    protected function checkThrowable(
+        Throwable $throwable,
+        string $expectedClass,
+        ?string $expectedMsg,
+        int|null $expectedCode = null
+    ): void {
         if (!($throwable instanceof $expectedClass)) {
             $this->fail(sprintf(
                 "Exception of class '%s' expected to be thrown, but class '%s' was caught",
                 $expectedClass,
-                get_class($throwable)
+                get_debug_type($throwable)
             ));
         }
 

@@ -12,7 +12,9 @@ use Exception;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Constraint\IsEqual;
 use PHPUnit\Framework\IncompleteTestError;
+use PHPUnit\Framework\SkippedTestError;
 use PHPUnit\Framework\SkippedWithMessageException;
+use PHPUnit\Runner\Version as PHPUnitVersion;
 use RuntimeException;
 use stdClass;
 
@@ -46,14 +48,14 @@ final class AssertsTest extends TestCase
     {
         $this->module->assertArrayHasKey('one', ['one' => 1, 'two' => 2]);
         $this->module->assertArrayNotHasKey('three', ['one' => 1, 'two' => 2]);
-        $this->module->assertClassHasAttribute('foo', \DummyClass::class);
-        $this->module->assertClassHasStaticAttribute('staticFoo', \DummyClass::class);
-        $this->module->assertClassNotHasAttribute('bar', \DummyClass::class);
-        $this->module->assertClassNotHasStaticAttribute('staticBar', \DummyClass::class);
+        $this->module->assertClassHasAttribute('foo', \Support\Data\DummyClass::class);
+        $this->module->assertClassHasStaticAttribute('staticFoo', \Support\Data\DummyClass::class);
+        $this->module->assertClassNotHasAttribute('bar', \Support\Data\DummyClass::class);
+        $this->module->assertClassNotHasStaticAttribute('staticBar', \Support\Data\DummyClass::class);
         $this->module->assertContains(1, [1, 2]);
         $this->module->assertContainsEquals(2, [1, 2]);
-        $this->module->assertContainsOnly(\DummyClass::class, [new \DummyClass(), new \DummyClass()]);
-        $this->module->assertContainsOnlyInstancesOf(\DummyClass::class, [new \DummyClass(), new \DummyClass()]);
+        $this->module->assertContainsOnly(\Support\Data\DummyClass::class, [new \Support\Data\DummyClass(), new \Support\Data\DummyClass()]);
+        $this->module->assertContainsOnlyInstancesOf(\Support\Data\DummyClass::class, [new \Support\Data\DummyClass(), new \Support\Data\DummyClass()]);
         $this->module->assertCount(3, [1, 2, 3]);
         $this->module->assertDirectoryDoesNotExist(__DIR__.'notExist');
         $this->module->assertDirectoryExists(__DIR__);
@@ -130,7 +132,7 @@ final class AssertsTest extends TestCase
         $this->module->assertNan(sqrt(-1));
         $this->module->assertNotContains('three', ['one', 'two']);
         $this->module->assertNotContainsEquals(3, [1, 2]);
-        $this->module->assertNotContainsOnly(\DummyClass::class, [new \DummyClass(), new Exception()]);
+        $this->module->assertNotContainsOnly(\Support\Data\DummyClass::class, [new \Support\Data\DummyClass(), new Exception()]);
         $this->module->assertNotCount(1, ['one', 'two']);
         $this->module->assertNotEmpty([1]);
         $this->module->assertNotEquals(true, false);
@@ -150,8 +152,8 @@ final class AssertsTest extends TestCase
         $this->module->assertNotTrue(null);
         $this->module->assertNotTrue('foo');
         $this->module->assertNull(null);
-        $this->module->assertObjectHasAttribute('foo', new \DummyClass());
-        $this->module->assertObjectNotHasAttribute('bar', new \DummyClass());
+        $this->module->assertObjectHasAttribute('foo', new \Support\Data\DummyClass());
+        $this->module->assertObjectNotHasAttribute('bar', new \Support\Data\DummyClass());
         $this->module->assertSame(1, 1);
         $this->module->assertSameSize([1, 2, 3], [1, 2, 3]);
         $this->module->assertStringContainsString('bar', 'foobar');
@@ -280,8 +282,12 @@ final class AssertsTest extends TestCase
 
     public function testMarkTestSkipped()
     {
-        $this->expectException(SkippedWithMessageException::class);
         $this->expectExceptionMessage('foobar');
+        if (PHPUnitVersion::series() < 10) {
+            $this->expectException(SkippedTestError::class);
+        } else {
+            $this->expectException(SkippedWithMessageException::class);
+        }
 
         $this->module->markTestSkipped('foobar');
     }
