@@ -95,7 +95,6 @@ abstract class AbstractAsserts extends Module
         assertMatchesRegularExpression as public;
         assertNan as public;
         assertNotContains as public;
-        assertNotContainsEquals as public;
         assertNotContainsOnly as public;
         assertNotCount as public;
         assertNotEmpty as public;
