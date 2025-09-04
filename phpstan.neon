@@ -3,3 +3,5 @@ parameters:
     paths:
         - tests/
         - src/
+    ignoreErrors:
+        - '#^Call to method Codeception\\Module\\AbstractAsserts::.*\(\) .*will always evaluate to.*$#'
