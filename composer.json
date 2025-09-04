@@ -3,6 +3,7 @@
     "description": "Codeception module containing various assertions",
     "license": "MIT",
     "type": "library",
+    "prefer-stable": true,
     "keywords": [
         "codeception",
         "asserts",
@@ -24,10 +25,14 @@
     "require": {
         "php": "^8.2",
         "codeception/codeception": "*@dev",
-        "codeception/lib-asserts": "^2.2"
+        "phpunit/phpunit": "^11.5 | ^12",
+        "ext-dom": "*"
     },
     "conflict": {
         "codeception/codeception": "<5.0"
+    },
+    "provide": {
+      "codeception/lib-asserts": "^2.2"
     },
     "minimum-stability": "dev",
     "autoload": {
