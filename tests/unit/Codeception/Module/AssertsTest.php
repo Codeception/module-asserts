@@ -16,6 +16,7 @@ use PHPUnit\Framework\IncompleteTestError;
 use PHPUnit\Framework\SkippedTest;
 use RuntimeException;
 use stdClass;
+use Support\Data\DummyClass;
 
 final class AssertsTest extends TestCase
 {
@@ -45,16 +46,17 @@ final class AssertsTest extends TestCase
 
     public function testPHPUnitAsserts(): void
     {
+        $dir = codecept_data_dir();
         $this->module->assertArrayHasKey('one', ['one' => 1, 'two' => 2]);
         $this->module->assertArrayNotHasKey('three', ['one' => 1, 'two' => 2]);
-        $this->module->assertClassHasAttribute('foo', \Support\Data\DummyClass::class);
-        $this->module->assertClassHasStaticAttribute('staticFoo', \Support\Data\DummyClass::class);
-        $this->module->assertClassNotHasAttribute('bar', \Support\Data\DummyClass::class);
-        $this->module->assertClassNotHasStaticAttribute('staticBar', \Support\Data\DummyClass::class);
+        $this->module->assertClassHasAttribute('foo', DummyClass::class);
+        $this->module->assertClassHasStaticAttribute('staticFoo', DummyClass::class);
+        $this->module->assertClassNotHasAttribute('bar', DummyClass::class);
+        $this->module->assertClassNotHasStaticAttribute('staticBar', DummyClass::class);
         $this->module->assertContains(1, [1, 2]);
         $this->module->assertContainsEquals(2, [1, 2]);
-        $this->module->assertContainsOnly(\Support\Data\DummyClass::class, [new \Support\Data\DummyClass(), new \Support\Data\DummyClass()]);
-        $this->module->assertContainsOnlyInstancesOf(\Support\Data\DummyClass::class, [new \Support\Data\DummyClass(), new \Support\Data\DummyClass()]);
+        $this->module->assertContainsOnly(DummyClass::class, [new DummyClass(), new DummyClass()]);
+        $this->module->assertContainsOnlyInstancesOf(DummyClass::class, [new DummyClass(), new DummyClass()]);
         $this->module->assertCount(3, [1, 2, 3]);
         $this->module->assertDirectoryDoesNotExist(__DIR__ . 'notExist');
         $this->module->assertDirectoryExists(__DIR__);
@@ -71,17 +73,17 @@ final class AssertsTest extends TestCase
         $this->module->assertEqualsWithDelta(1.0, 1.01, 0.1);
         $this->module->assertFalse(false);
         $this->module->assertFileDoesNotExist(__FILE__ . '.notExist');
-        $this->module->assertFileEquals(codecept_data_dir() . '/data1.txt', codecept_data_dir() . '/data1.txt');
-        $this->module->assertFileEqualsCanonicalizing(codecept_data_dir() . '/data1.txt', codecept_data_dir() . '/data1.txt');
-        $this->module->assertFileEqualsIgnoringCase(codecept_data_dir() . '/data1.txt', codecept_data_dir() . '/data2.txt');
+        $this->module->assertFileEquals($dir . '/data1.txt', $dir . '/data1.txt');
+        $this->module->assertFileEqualsCanonicalizing($dir . '/data1.txt', $dir . '/data1.txt');
+        $this->module->assertFileEqualsIgnoringCase($dir . '/data1.txt', $dir . '/data2.txt');
         $this->module->assertFileExists(__FILE__);
         // assertFileIsNotReadable
         // assertFileIsNotWritable
         $this->module->assertFileIsReadable(__FILE__);
         $this->module->assertFileIsWritable(__FILE__);
-        $this->module->assertFileNotEquals(codecept_data_dir() . '/data1.json', codecept_data_dir() . '/data1.txt');
-        $this->module->assertFileNotEqualsCanonicalizing(codecept_data_dir() . '/data1.txt', codecept_data_dir() . '/data3.txt');
-        $this->module->assertFileNotEqualsIgnoringCase(codecept_data_dir() . '/data1.txt', codecept_data_dir() . '/data3.txt');
+        $this->module->assertFileNotEquals($dir . '/data1.json', $dir . '/data1.txt');
+        $this->module->assertFileNotEqualsCanonicalizing($dir . '/data1.txt', $dir . '/data3.txt');
+        $this->module->assertFileNotEqualsIgnoringCase($dir . '/data1.txt', $dir . '/data3.txt');
         $this->module->assertFinite(2);
         $this->module->assertGreaterThan(5, 6);
         $this->module->assertGreaterThanOrEqual(5, 5);
@@ -123,18 +125,18 @@ final class AssertsTest extends TestCase
         $this->module->assertIsString('test');
         $this->module->assertIsWritable(__FILE__);
         $this->module->assertJson('[]');
-        $this->module->assertJsonFileEqualsJsonFile(codecept_data_dir() . '/data1.json', codecept_data_dir() . '/data1.json');
-        $this->module->assertJsonFileNotEqualsJsonFile(codecept_data_dir() . '/data1.json', codecept_data_dir() . '/data2.json');
-        $this->module->assertJsonStringEqualsJsonFile(codecept_data_dir() . '/data1.json', '["foo", "bar"]');
+        $this->module->assertJsonFileEqualsJsonFile($dir . '/data1.json', $dir . '/data1.json');
+        $this->module->assertJsonFileNotEqualsJsonFile($dir . '/data1.json', $dir . '/data2.json');
+        $this->module->assertJsonStringEqualsJsonFile($dir . '/data1.json', '["foo", "bar"]');
         $this->module->assertJsonStringEqualsJsonString('["foo", "bar"]', '[ "foo" , "bar" ]');
-        $this->module->assertJsonStringNotEqualsJsonFile(codecept_data_dir() . '/data1.json', '["bar", "foo"]');
+        $this->module->assertJsonStringNotEqualsJsonFile($dir . '/data1.json', '["bar", "foo"]');
         $this->module->assertJsonStringNotEqualsJsonString('["foo", "bar"]', '["bar", "foo"]');
         $this->module->assertLessThan(4, 3);
         $this->module->assertLessThanOrEqual(3, 3);
         $this->module->assertMatchesRegularExpression('/^[\d]$/', '1');
         $this->module->assertNan(sqrt(-1));
         $this->module->assertNotContains('three', ['one', 'two']);
-        $this->module->assertNotContainsOnly(\Support\Data\DummyClass::class, [new \Support\Data\DummyClass(), new Exception()]);
+        $this->module->assertNotContainsOnly(DummyClass::class, [new DummyClass(), new Exception()]);
         $this->module->assertNotCount(1, ['one', 'two']);
         $this->module->assertNotEmpty([1]);
         $this->module->assertNotEquals(true, false);
@@ -154,35 +156,35 @@ final class AssertsTest extends TestCase
         $this->module->assertNotTrue(null);
         $this->module->assertNotTrue('foo');
         $this->module->assertNull(null);
-        $this->module->assertObjectHasAttribute('foo', new \Support\Data\DummyClass());
-        $this->module->assertObjectNotHasAttribute('bar', new \Support\Data\DummyClass());
+        $this->module->assertObjectHasAttribute('foo', new DummyClass());
+        $this->module->assertObjectNotHasAttribute('bar', new DummyClass());
         $this->module->assertSame(1, 1);
         $this->module->assertSameSize([1, 2, 3], [1, 2, 3]);
         $this->module->assertStringContainsString('bar', 'foobar');
         $this->module->assertStringContainsStringIgnoringCase('bar', 'FooBar');
         $this->module->assertStringEndsNotWith('fo', 'foo');
         $this->module->assertStringEndsWith('oo', 'foo');
-        $this->module->assertStringEqualsFile(codecept_data_dir() . '/data1.txt', 'foo bar foo');
-        $this->module->assertStringEqualsFileCanonicalizing(codecept_data_dir() . '/data1.txt', 'foo bar foo');
-        $this->module->assertStringEqualsFileIgnoringCase(codecept_data_dir() . '/data1.txt', 'foo bAr foo');
+        $this->module->assertStringEqualsFile($dir . '/data1.txt', 'foo bar foo');
+        $this->module->assertStringEqualsFileCanonicalizing($dir . '/data1.txt', 'foo bar foo');
+        $this->module->assertStringEqualsFileIgnoringCase($dir . '/data1.txt', 'foo bAr foo');
         $this->module->assertStringMatchesFormat('*%s*', '***');
-        $this->module->assertStringMatchesFormatFile(codecept_data_dir() . '/expectedFileFormat.txt', "FOO\n");
+        $this->module->assertStringMatchesFormatFile($dir . '/expectedFileFormat.txt', "FOO\n");
         $this->module->assertStringNotContainsString('baz', 'foobar');
         $this->module->assertStringNotContainsStringIgnoringCase('baz', 'FooBar');
-        $this->module->assertStringNotEqualsFile(codecept_data_dir() . '/data2.txt', 'foo bar foo');
-        $this->module->assertStringNotEqualsFileCanonicalizing(codecept_data_dir() . '/data3.txt', 'foo bar foo');
-        $this->module->assertStringNotEqualsFileIgnoringCase(codecept_data_dir() . '/data3.txt', 'foo bar foo');
+        $this->module->assertStringNotEqualsFile($dir . '/data2.txt', 'foo bar foo');
+        $this->module->assertStringNotEqualsFileCanonicalizing($dir . '/data3.txt', 'foo bar foo');
+        $this->module->assertStringNotEqualsFileIgnoringCase($dir . '/data3.txt', 'foo bar foo');
         $this->module->assertStringNotMatchesFormat('*%s*', '**');
-        $this->module->assertStringNotMatchesFormatFile(codecept_data_dir() . '/expectedFileFormat.txt', "FO");
+        $this->module->assertStringNotMatchesFormatFile($dir . '/expectedFileFormat.txt', "FO");
         $this->module->assertStringStartsNotWith('ba', 'foo');
         $this->module->assertStringStartsWith('fo', 'foo');
         $this->module->assertThat(4, new IsEqual(4));
         $this->module->assertTrue(true);
-        $this->module->assertXmlFileEqualsXmlFile(codecept_data_dir() . '/data1.xml', codecept_data_dir() . '/data1.xml');
-        $this->module->assertXmlFileNotEqualsXmlFile(codecept_data_dir() . '/data1.xml', codecept_data_dir() . '/data2.xml');
-        $this->module->assertXmlStringEqualsXmlFile(codecept_data_dir() . '/data1.xml', ' <foo>foo</foo> ');
+        $this->module->assertXmlFileEqualsXmlFile($dir . '/data1.xml', $dir . '/data1.xml');
+        $this->module->assertXmlFileNotEqualsXmlFile($dir . '/data1.xml', $dir . '/data2.xml');
+        $this->module->assertXmlStringEqualsXmlFile($dir . '/data1.xml', ' <foo>foo</foo> ');
         $this->module->assertXmlStringEqualsXmlString('<foo>foo</foo>', ' <foo>foo</foo> ');
-        $this->module->assertXmlStringNotEqualsXmlFile(codecept_data_dir() . '/data1.xml', '<foo>bar</foo>');
+        $this->module->assertXmlStringNotEqualsXmlFile($dir . '/data1.xml', '<foo>bar</foo>');
         $this->module->assertXmlStringNotEqualsXmlString('<foo>foo</foo>', '<foo>bar</foo>');
     }
 
