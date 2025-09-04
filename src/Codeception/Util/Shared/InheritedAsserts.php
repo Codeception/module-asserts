@@ -46,8 +46,11 @@ trait InheritedAsserts
      * Asserts that a class has a specified static attribute.
      * @param class-string $className
      */
-    protected function assertClassHasStaticAttribute(string $attributeName, string $className, string $message = ''): void
-    {
+    protected function assertClassHasStaticAttribute(
+        string $attributeName,
+        string $className,
+        string $message = ''
+    ): void {
         trigger_error(__FUNCTION__ . ' was removed from PHPUnit since PHPUnit 10', E_USER_DEPRECATED);
 
         Assert::assertTrue(self::hasStaticAttribute($attributeName, $className), $message);
@@ -67,8 +70,11 @@ trait InheritedAsserts
      * Asserts that a class does not have a specified static attribute.
      * @param class-string $className
      */
-    protected function assertClassNotHasStaticAttribute(string $attributeName, string $className, string $message = ''): void
-    {
+    protected function assertClassNotHasStaticAttribute(
+        string $attributeName,
+        string $className,
+        string $message = ''
+    ): void {
         trigger_error(__FUNCTION__ . ' was removed from PHPUnit since PHPUnit 10', E_USER_DEPRECATED);
         Assert::assertFalse(self::hasStaticAttribute($attributeName, $className), $message);
     }
@@ -93,11 +99,16 @@ trait InheritedAsserts
 
     /**
      * Asserts that a haystack contains only values of a given type.
-     * @param 'array'|'bool'|'boolean'|'callable'|'double'|'float'|'int'|'integer'|'iterable'|'null'|'numeric'|'object'|'real'|'resource'|'resource (closed)'|'scalar'|'string'|class-string $type
+     * @param 'array'|'bool'|'boolean'|'callable'|'double'|'float'|'int'|'integer'|'iterable'
+     *          |'null'|'numeric'|'object'|'real'|'resource'|'resource (closed)'|'scalar'|'string'|class-string $type
      * @param iterable<mixed> $haystack
      */
-    protected function assertContainsOnly(string $type, iterable $haystack, ?bool $isNativeType = null, string $message = ''): void
-    {
+    protected function assertContainsOnly(
+        string $type,
+        iterable $haystack,
+        ?bool $isNativeType = null,
+        string $message = ''
+    ): void {
         /** @phpstan-ignore-next-line */
         Assert::assertContainsOnly($type, $haystack, $isNativeType, $message);
     }
@@ -729,48 +740,65 @@ trait InheritedAsserts
     /**
      * Asserts that two JSON files are equal.
      */
-    protected function assertJsonFileEqualsJsonFile(string $expectedFile, string $actualFile, string $message = ''): void
-    {
+    protected function assertJsonFileEqualsJsonFile(
+        string $expectedFile,
+        string $actualFile,
+        string $message = ''
+    ): void {
         Assert::assertJsonFileEqualsJsonFile($expectedFile, $actualFile, $message);
     }
-
     /**
      * Asserts that two JSON files are not equal.
      */
-    protected function assertJsonFileNotEqualsJsonFile(string $expectedFile, string $actualFile, string $message = ''): void
-    {
+    protected function assertJsonFileNotEqualsJsonFile(
+        string $expectedFile,
+        string $actualFile,
+        string $message = ''
+    ): void {
         Assert::assertJsonFileNotEqualsJsonFile($expectedFile, $actualFile, $message);
     }
 
     /**
      * Asserts that the generated JSON encoded object and the content of the given file are equal.
      */
-    protected function assertJsonStringEqualsJsonFile(string $expectedFile, string $actualJson, string $message = ''): void
-    {
+    protected function assertJsonStringEqualsJsonFile(
+        string $expectedFile,
+        string $actualJson,
+        string $message = ''
+    ): void {
         Assert::assertJsonStringEqualsJsonFile($expectedFile, $actualJson, $message);
     }
 
     /**
      * Asserts that two given JSON encoded objects or arrays are equal.
      */
-    protected function assertJsonStringEqualsJsonString(string $expectedJson, string $actualJson, string $message = ''): void
-    {
+    protected function assertJsonStringEqualsJsonString(
+        string $expectedJson,
+        string $actualJson,
+        string $message = ''
+    ): void {
         Assert::assertJsonStringEqualsJsonString($expectedJson, $actualJson, $message);
     }
 
     /**
      * Asserts that the generated JSON encoded object and the content of the given file are not equal.
      */
-    protected function assertJsonStringNotEqualsJsonFile(string $expectedFile, string $actualJson, string $message = ''): void
-    {
+    protected function assertJsonStringNotEqualsJsonFile(
+        string $expectedFile,
+        string $actualJson,
+        string $message = ''
+    ): void {
         Assert::assertJsonStringNotEqualsJsonFile($expectedFile, $actualJson, $message);
     }
 
     /**
      * Asserts that two given JSON encoded objects or arrays are not equal.
      */
-    protected function assertJsonStringNotEqualsJsonString(string $expectedJson, string $actualJson, string $message = ''): void
-    {
+    protected function assertJsonStringNotEqualsJsonString(
+        string $expectedJson,
+        string $actualJson,
+        string $message = ''
+    ): void {
         Assert::assertJsonStringNotEqualsJsonString($expectedJson, $actualJson, $message);
     }
 
@@ -826,11 +854,16 @@ trait InheritedAsserts
 
     /**
      * Asserts that a haystack does not contain only values of a given type.
-     * @param 'array'|'bool'|'boolean'|'callable'|'double'|'float'|'int'|'integer'|'iterable'|'null'|'numeric'|'object'|'real'|'resource'|'resource (closed)'|'scalar'|'string'|class-string $type
+     * @param 'array'|'bool'|'boolean'|'callable'|'double'|'float'|'int'|'integer'|'iterable'|'null'
+     *      |'numeric'|'object'|'real'|'resource'|'resource (closed)'|'scalar'|'string'|class-string $type
      * @param iterable<mixed> $haystack
      */
-    protected function assertNotContainsOnly(string $type, iterable $haystack, ?bool $isNativeType = null, string $message = ''): void
-    {
+    protected function assertNotContainsOnly(
+        string $type,
+        iterable $haystack,
+        ?bool $isNativeType = null,
+        string $message = ''
+    ): void {
         /** @phpstan-ignore-next-line  */
         Assert::assertNotContainsOnly($type, $haystack, $isNativeType, $message);
     }
@@ -957,8 +990,11 @@ trait InheritedAsserts
      * @param \Countable|iterable<mixed> $expected
      * @param \Countable|iterable<mixed> $actual
      */
-    protected function assertNotSameSize(\Countable|iterable $expected, \Countable|iterable $actual, string $message = ''): void
-    {
+    protected function assertNotSameSize(
+        \Countable|iterable $expected,
+        \Countable|iterable $actual,
+        string $message = ''
+    ): void {
         Assert::assertNotSameSize($expected, $actual, $message);
     }
 
@@ -1035,8 +1071,11 @@ trait InheritedAsserts
      * @param \Countable|iterable<mixed> $expected
      * @param \Countable|iterable<mixed> $actual
      */
-    protected function assertSameSize(\Countable|iterable $expected, \Countable|iterable $actual, string $message = ''): void
-    {
+    protected function assertSameSize(
+        \Countable|iterable $expected,
+        \Countable|iterable $actual,
+        string $message = ''
+    ): void {
         Assert::assertSameSize($expected, $actual, $message);
     }
 
@@ -1045,8 +1084,11 @@ trait InheritedAsserts
         Assert::assertStringContainsString($needle, $haystack, $message);
     }
 
-    protected function assertStringContainsStringIgnoringCase(string $needle, string $haystack, string $message = ''): void
-    {
+    protected function assertStringContainsStringIgnoringCase(
+        string $needle,
+        string $haystack,
+        string $message = ''
+    ): void {
         Assert::assertStringContainsStringIgnoringCase($needle, $haystack, $message);
     }
 
@@ -1079,17 +1121,12 @@ trait InheritedAsserts
     /**
      * Asserts that the contents of a string is equal to the contents of a file (canonicalizing).
      */
-    protected function assertStringEqualsFileCanonicalizing(string $expectedFile, string $actualString, string $message = ''): void
-    {
+    protected function assertStringEqualsFileCanonicalizing(
+        string $expectedFile,
+        string $actualString,
+        string $message = ''
+    ): void {
         Assert::assertStringEqualsFileCanonicalizing($expectedFile, $actualString, $message);
-    }
-
-    /**
-     * Asserts that the contents of a string is equal to the contents of a file (ignoring case).
-     */
-    protected function assertStringEqualsFileIgnoringCase(string $expectedFile, string $actualString, string $message = ''): void
-    {
-        Assert::assertStringEqualsFileIgnoringCase($expectedFile, $actualString, $message);
     }
 
     /**
@@ -1098,6 +1135,17 @@ trait InheritedAsserts
     protected function assertStringMatchesFormat(string $format, string $string, string $message = ''): void
     {
         Assert::assertStringMatchesFormat($format, $string, $message);
+    }
+
+    /**
+     * Asserts that the contents of a string is equal to the contents of a file (ignoring case).
+     */
+    protected function assertStringEqualsFileIgnoringCase(
+        string $expectedFile,
+        string $actualString,
+        string $message = ''
+    ): void {
+        Assert::assertStringEqualsFileIgnoringCase($expectedFile, $actualString, $message);
     }
 
     /**
@@ -1113,8 +1161,11 @@ trait InheritedAsserts
         Assert::assertStringNotContainsString($needle, $haystack, $message);
     }
 
-    protected function assertStringNotContainsStringIgnoringCase(string $needle, string $haystack, string $message = ''): void
-    {
+    protected function assertStringNotContainsStringIgnoringCase(
+        string $needle,
+        string $haystack,
+        string $message = ''
+    ): void {
         Assert::assertStringNotContainsStringIgnoringCase($needle, $haystack, $message);
     }
 
@@ -1129,16 +1180,22 @@ trait InheritedAsserts
     /**
      * Asserts that the contents of a string is not equal to the contents of a file (canonicalizing).
      */
-    protected function assertStringNotEqualsFileCanonicalizing(string $expectedFile, string $actualString, string $message = ''): void
-    {
+    protected function assertStringNotEqualsFileCanonicalizing(
+        string $expectedFile,
+        string $actualString,
+        string $message = ''
+    ): void {
         Assert::assertStringNotEqualsFileCanonicalizing($expectedFile, $actualString, $message);
     }
 
     /**
      * Asserts that the contents of a string is not equal to the contents of a file (ignoring case).
      */
-    protected function assertStringNotEqualsFileIgnoringCase(string $expectedFile, string $actualString, string $message = ''): void
-    {
+    protected function assertStringNotEqualsFileIgnoringCase(
+        string $expectedFile,
+        string $actualString,
+        string $message = ''
+    ): void {
         Assert::assertStringNotEqualsFileIgnoringCase($expectedFile, $actualString, $message);
     }
 
@@ -1217,16 +1274,22 @@ trait InheritedAsserts
     /**
      * Asserts that two XML files are not equal.
      */
-    protected function assertXmlFileNotEqualsXmlFile(string $expectedFile, string $actualFile, string $message = ''): void
-    {
+    protected function assertXmlFileNotEqualsXmlFile(
+        string $expectedFile,
+        string $actualFile,
+        string $message = ''
+    ): void {
         Assert::assertXmlFileNotEqualsXmlFile($expectedFile, $actualFile, $message);
     }
 
     /**
      * Asserts that two XML documents are equal.
      */
-    protected function assertXmlStringEqualsXmlFile(string $expectedFile, \DOMDocument|string $actualXml, string $message = ''): void
-    {
+    protected function assertXmlStringEqualsXmlFile(
+        string $expectedFile,
+        \DOMDocument|string $actualXml,
+        string $message = ''
+    ): void {
         if ($actualXml instanceof \DOMDocument) {
             $actualXml = $actualXml->saveXML();
             if ($actualXml === false) {
@@ -1239,8 +1302,11 @@ trait InheritedAsserts
     /**
      * Asserts that two XML documents are equal.
      */
-    protected function assertXmlStringEqualsXmlString(\DOMDocument|string $expectedXml, \DOMDocument|string $actualXml, string $message = ''): void
-    {
+    protected function assertXmlStringEqualsXmlString(
+        \DOMDocument|string $expectedXml,
+        \DOMDocument|string $actualXml,
+        string $message = ''
+    ): void {
         if ($actualXml instanceof \DOMDocument) {
             $actualXml = $actualXml->saveXML();
             if ($actualXml === false) {

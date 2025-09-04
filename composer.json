@@ -25,7 +25,8 @@
     "require": {
         "php": "^8.2",
         "codeception/codeception": "*@dev",
-        "phpunit/phpunit": "^11.5 | ^12"
+        "phpunit/phpunit": "^11.5 | ^12",
+        "ext-dom": "*"
     },
     "conflict": {
         "codeception/codeception": "<5.0"

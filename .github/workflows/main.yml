@@ -35,7 +35,7 @@ jobs:
         run: phpstan
 
       - name: Run PHPCS
-        run: phpcs --standard=PSR12 src
+        run: phpcs --standard=PSR12 src tests
 
       - name: Run test suite
         run: php vendor/bin/codecept run
