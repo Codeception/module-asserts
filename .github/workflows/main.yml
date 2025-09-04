@@ -28,7 +28,7 @@ jobs:
         run: composer install --prefer-dist --no-progress --no-interaction --no-suggest
 
       - name: Run PHPStan
-        run: phpstan analyse src
+        run: phpstan
 
       - name: Run PHPCS
         run: phpcs --standard=PSR12 src

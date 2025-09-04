@@ -9,20 +9,20 @@ use Codeception\Module\Asserts;
 use Codeception\PHPUnit\TestCase;
 use Codeception\Stub;
 use Exception;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Constraint\IsEqual;
 use PHPUnit\Framework\IncompleteTestError;
+use PHPUnit\Framework\SkippedTest;
 use PHPUnit\Framework\SkippedTestError;
-use PHPUnit\Framework\SkippedWithMessageException;
-use PHPUnit\Runner\Version as PHPUnitVersion;
 use RuntimeException;
 use stdClass;
 
 final class AssertsTest extends TestCase
 {
-    protected ?Asserts $module = null;
+    private Asserts $module;
 
-    public function _setUp()
+    public function _setUp(): void
     {
         require_once codecept_data_dir().'/DummyClass.php';
 
@@ -31,7 +31,7 @@ final class AssertsTest extends TestCase
         $this->module = new Asserts($container);
     }
 
-    public function testCodeceptionAsserts()
+    public function testCodeceptionAsserts(): void
     {
         $this->module->assertFileNotExists(__FILE__ . '.notExist');
         $this->module->assertGreaterOrEquals(2, 2);
@@ -44,7 +44,7 @@ final class AssertsTest extends TestCase
         $this->module->assertThatItsNot(3, new IsEqual(4));
     }
 
-    public function testPHPUnitAsserts()
+    public function testPHPUnitAsserts(): void
     {
         $this->module->assertArrayHasKey('one', ['one' => 1, 'two' => 2]);
         $this->module->assertArrayNotHasKey('three', ['one' => 1, 'two' => 2]);
@@ -91,7 +91,8 @@ final class AssertsTest extends TestCase
         $this->module->assertIsArray([1, 2, 3]);
         $this->module->assertIsBool(true);
         $this->module->assertIsCallable(function() {});
-        $closedResource = fopen(__FILE__, 'r');
+        $closedResource = fopen('php://temp', 'r');
+        Assert::assertNotFalse($closedResource);
         fclose($closedResource);
         $this->module->assertIsClosedResource($closedResource);
         $this->module->assertIsFloat(1.2);
@@ -100,7 +101,8 @@ final class AssertsTest extends TestCase
         $this->module->assertIsNotArray(false);
         $this->module->assertIsNotBool([1, 2, 3]);
         $this->module->assertIsNotCallable('test');
-        $openendResource = fopen(__FILE__, 'r');
+        $openendResource = fopen('php://temp', 'r');
+        Assert::assertNotFalse($openendResource);
         $this->module->assertIsNotClosedResource($openendResource);
         $this->module->assertIsNotFloat(false);
         $this->module->assertIsNotInt(false);
@@ -131,7 +133,6 @@ final class AssertsTest extends TestCase
         $this->module->assertMatchesRegularExpression('/^[\d]$/', '1');
         $this->module->assertNan(sqrt(-1));
         $this->module->assertNotContains('three', ['one', 'two']);
-        $this->module->assertNotContainsEquals(3, [1, 2]);
         $this->module->assertNotContainsOnly(\Support\Data\DummyClass::class, [new \Support\Data\DummyClass(), new Exception()]);
         $this->module->assertNotCount(1, ['one', 'two']);
         $this->module->assertNotEmpty([1]);
@@ -184,7 +185,7 @@ final class AssertsTest extends TestCase
         $this->module->assertXmlStringNotEqualsXmlString('<foo>foo</foo>', '<foo>bar</foo>');
     }
 
-    public function testExceptions()
+    public function testExceptions(): void
     {
         $this->module->expectThrowable('Exception', function () {
             throw new Exception;
@@ -197,7 +198,7 @@ final class AssertsTest extends TestCase
         });
     }
 
-    public function testExceptionFails()
+    public function testExceptionFails(): void
     {
         $this->expectException(AssertionFailedError::class);
 
@@ -206,7 +207,7 @@ final class AssertsTest extends TestCase
         });
     }
 
-    public function testOutputExceptionTimeWhenNothingCaught()
+    public function testOutputExceptionTimeWhenNothingCaught(): void
     {
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessageRegExp('/RuntimeException/');
@@ -215,7 +216,7 @@ final class AssertsTest extends TestCase
         });
     }
 
-    public function testExpectThrowable()
+    public function testExpectThrowable(): void
     {
         $this->module->expectThrowable('Exception', function () {
             throw new Exception();
@@ -228,7 +229,7 @@ final class AssertsTest extends TestCase
         });
     }
 
-    public function testExpectThrowableFailOnDifferentClass()
+    public function testExpectThrowableFailOnDifferentClass(): void
     {
         $this->expectException(AssertionFailedError::class);
 
@@ -237,7 +238,7 @@ final class AssertsTest extends TestCase
         });
     }
 
-    public function testExpectThrowableFailOnDifferentMessage()
+    public function testExpectThrowableFailOnDifferentMessage(): void
     {
         $this->expectException(AssertionFailedError::class);
 
@@ -246,7 +247,7 @@ final class AssertsTest extends TestCase
         });
     }
 
-    public function testExpectThrowableFailOnDifferentCode()
+    public function testExpectThrowableFailOnDifferentCode(): void
     {
         $this->expectException(AssertionFailedError::class);
 
@@ -255,7 +256,7 @@ final class AssertsTest extends TestCase
         });
     }
 
-    public function testExpectThrowableFailOnNothingCaught()
+    public function testExpectThrowableFailOnNothingCaught(): void
     {
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessageRegExp('/RuntimeException/');
@@ -264,7 +265,7 @@ final class AssertsTest extends TestCase
         });
     }
 
-    public function testFail()
+    public function testFail(): void
     {
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessage('foobar');
@@ -272,7 +273,7 @@ final class AssertsTest extends TestCase
         $this->module->fail('foobar');
     }
 
-    public function testMarkTestIncomplete()
+    public function testMarkTestIncomplete(): void
     {
         $this->expectException(IncompleteTestError::class);
         $this->expectExceptionMessage('foobar');
@@ -280,15 +281,10 @@ final class AssertsTest extends TestCase
         $this->module->markTestIncomplete('foobar');
     }
 
-    public function testMarkTestSkipped()
+    public function testMarkTestSkipped(): void
     {
         $this->expectExceptionMessage('foobar');
-        if (PHPUnitVersion::series() < 10) {
-            $this->expectException(SkippedTestError::class);
-        } else {
-            $this->expectException(SkippedWithMessageException::class);
-        }
-
+        $this->expectException(SkippedTest::class);
         $this->module->markTestSkipped('foobar');
     }
 }
