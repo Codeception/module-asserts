@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace unit\Codeception\Module;
 
+use ArrayObject;
 use Codeception\Lib\ModuleContainer;
 use Codeception\Module\Asserts;
 use Codeception\PHPUnit\TestCase;
@@ -46,6 +47,11 @@ final class AssertsTest extends TestCase
 
     public function testPHPUnitAsserts()
     {
+        $closedResource = fopen(__FILE__, 'r');
+        fclose($closedResource);
+
+        $openendResource = fopen(__FILE__, 'r');
+
         $this->module->assertArrayHasKey('one', ['one' => 1, 'two' => 2]);
         $this->module->assertArrayNotHasKey('three', ['one' => 1, 'two' => 2]);
         $this->module->assertClassHasAttribute('foo', \Support\Data\DummyClass::class);
@@ -54,8 +60,36 @@ final class AssertsTest extends TestCase
         $this->module->assertClassNotHasStaticAttribute('staticBar', \Support\Data\DummyClass::class);
         $this->module->assertContains(1, [1, 2]);
         $this->module->assertContainsEquals(2, [1, 2]);
+        $this->module->assertContainsNotOnlyArray([['foo'], 'foo', ['bar']]);
+        $this->module->assertContainsNotOnlyBool([true, false, true, 42]);
+        $this->module->assertContainsNotOnlyCallable([fn() => 'foo', 'bar', fn() => 'bar']);
+        $this->module->assertContainsNotOnlyClosedResource([$closedResource, $openendResource]);
+        $this->module->assertContainsNotOnlyFloat([1.1, 1.42, 5]);
+        $this->module->assertContainsNotOnlyInstancesOf(\Support\Data\DummyClass::class, [new \Support\Data\DummyClass(), new stdClass(), new \Support\Data\DummyClass()]);
+        $this->module->assertContainsNotOnlyInt([1, 42, 42.1]);
+        $this->module->assertContainsNotOnlyIterable([['foo'], 'bar', [new ArrayObject(['foo'])]]);
+        $this->module->assertContainsNotOnlyNull([null, 42]);
+        $this->module->assertContainsNotOnlyNumeric(['foo', 42]);
+        $this->module->assertContainsNotOnlyObject([new stdClass(), []]);
+        $this->module->assertContainsNotOnlyResource([$openendResource, $closedResource, 'foo']);
+        $this->module->assertContainsNotOnlyScalar([1, new stdClass()]);
+        $this->module->assertContainsNotOnlyString(['foo', 42, 'bar']);
         $this->module->assertContainsOnly(\Support\Data\DummyClass::class, [new \Support\Data\DummyClass(), new \Support\Data\DummyClass()]);
+        $this->module->assertContainsOnly('integer', [5, 6]);
+        $this->module->assertContainsOnlyArray([['foo'], ['bar']]);
+        $this->module->assertContainsOnlyBool([true, false, true]);
+        $this->module->assertContainsOnlyCallable([fn() => 'foo', fn() => 'bar']);
+        $this->module->assertContainsOnlyClosedResource([$closedResource]);
+        $this->module->assertContainsOnlyFloat([1.1, 1.42]);
         $this->module->assertContainsOnlyInstancesOf(\Support\Data\DummyClass::class, [new \Support\Data\DummyClass(), new \Support\Data\DummyClass()]);
+        $this->module->assertContainsOnlyInt([1, 42]);
+        $this->module->assertContainsOnlyIterable([['foo'], [new ArrayObject(['foo'])]]);
+        $this->module->assertContainsOnlyNull([null, null]);
+        $this->module->assertContainsOnlyNumeric(['42.5', 42]);
+        $this->module->assertContainsOnlyObject([new stdClass(), new ArrayObject(['bar'])]);
+        $this->module->assertContainsOnlyResource([$openendResource, $closedResource]);
+        $this->module->assertContainsOnlyScalar([1, 'foo']);
+        $this->module->assertContainsOnlyString(['foo', 'bar']);
         $this->module->assertCount(3, [1, 2, 3]);
         $this->module->assertDirectoryDoesNotExist(__DIR__.'notExist');
         $this->module->assertDirectoryExists(__DIR__);
@@ -91,8 +125,6 @@ final class AssertsTest extends TestCase
         $this->module->assertIsArray([1, 2, 3]);
         $this->module->assertIsBool(true);
         $this->module->assertIsCallable(function() {});
-        $closedResource = fopen(__FILE__, 'r');
-        fclose($closedResource);
         $this->module->assertIsClosedResource($closedResource);
         $this->module->assertIsFloat(1.2);
         $this->module->assertIsInt(2);
@@ -100,7 +132,6 @@ final class AssertsTest extends TestCase
         $this->module->assertIsNotArray(false);
         $this->module->assertIsNotBool([1, 2, 3]);
         $this->module->assertIsNotCallable('test');
-        $openendResource = fopen(__FILE__, 'r');
         $this->module->assertIsNotClosedResource($openendResource);
         $this->module->assertIsNotFloat(false);
         $this->module->assertIsNotInt(false);
@@ -133,6 +164,7 @@ final class AssertsTest extends TestCase
         $this->module->assertNotContains('three', ['one', 'two']);
         $this->module->assertNotContainsEquals(3, [1, 2]);
         $this->module->assertNotContainsOnly(\Support\Data\DummyClass::class, [new \Support\Data\DummyClass(), new Exception()]);
+        $this->module->assertNotContainsOnly('integer', [1, 42, 42.1]);
         $this->module->assertNotCount(1, ['one', 'two']);
         $this->module->assertNotEmpty([1]);
         $this->module->assertNotEquals(true, false);
